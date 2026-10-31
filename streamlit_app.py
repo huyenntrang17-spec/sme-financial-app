@@ -3,14 +3,67 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
-st.set_page_config(page_title="AI Financial Dashboard for SMEs", layout="wide")
+# Cấu hình trang với giao diện rộng
+st.set_page_config(page_title="AI Cybernetic CFO - SME Financial", layout="wide")
 
+# --- GIAO DIỆN CSS PHONG CÁCH ROBOT CÔNG NGHỆ (SCI-FI / CYBERPUNK) ---
 st.markdown("""
-    <div style="text-align: center; color: #0D47A1; margin-bottom: 20px;">
-        <h1>📊 HỆ THỐNG TRỢ LÝ ẢO AI PHÂN TÍCH TÀI CHÍNH & CẢNH BÁO DÒNG TIỀN</h1>
-        <h3>Giải pháp hỗ trợ quản trị tài chính tinh gọn cho Doanh nghiệp Siêu nhỏ (SMEs)</h3>
-    </div>
+    <style>
+    /* Màu nền tổng thể tối đậm chất công nghệ */
+    .stApp {
+        background-color: #0b0f19;
+        color: #00ffcc;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    
+    /* Tiêu đề phong cách bảng mạch / Hologram */
+    .hero-title {
+        background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+        font-weight: 900;
+        font-size: 28px;
+        text-shadow: 0px 0px 20px rgba(0, 242, 254, 0.5);
+        border-bottom: 2px solid #00f2fe;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+    }
+
+    /* Khung panel thông tin phong cách trạm AI */
+    .cyber-card {
+        background-color: #131c31;
+        border: 1px solid #00f2fe;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        margin-bottom: 20px;
+    }
+
+    /* Tùy chỉnh các nút bấm */
+    .stButton>button {
+        background: linear-gradient(45deg, #00f2fe, #4facfe);
+        color: #0b0f19;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+    }
+    .stButton>button:hover {
+        background: linear-gradient(45deg, #4facfe, #00f2fe);
+        color: #ffffff;
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.8);
+    }
+    
+    /* Chữ hiển thị nhãn */
+    label, .streamlit-expanderHeader {
+        color: #00f2fe !important;
+    }
+    </style>
 """, unsafe_allow_html=True)
+
+# Tiêu đề ứng dụng
+st.markdown('<div class="hero-title">🤖 [SYSTEM AI] - TRỢ LÝ CFO & CẢNH BÁO RỦI RO DÒNG TIỀN (SME)</div>', unsafe_allow_html=True)
 
 class FinancialAnalyzerStreamlit:
     def __init__(self, file_path):
@@ -51,33 +104,35 @@ class FinancialAnalyzerStreamlit:
         r = self.metrics[latest_p]
         reasons = []
         status = "GREEN"
-        status_text = "🟢 AN TOÀN - DÒNG TIỀN ỔN ĐỊNH"
+        status_text = "🟢 [AN TOÀN] - HỆ THỐNG DÒNG TIỀN ỔN ĐỊNH"
 
         if r["OCF Margin (%)"] < 5:
-            reasons.append("⚠️ Biên dòng tiền hoạt động kinh doanh mỏng (< 5%).")
+            reasons.append("⚠️ Cảnh báo: Biên dòng tiền hoạt động kinh doanh mỏng (< 5%).")
             status = "YELLOW"
-            status_text = "🟡 CẢNH BÁO - NGUY CƠ THIẾU HỤT DÒNG TIỀN NGHẾN MẠCH"
+            status_text = "🟡 [CẢNH BÁO] - NGUY CƠ NGHẼN MẠCH THANH KHOẢN"
 
         if r["Quick Ratio"] < 0.8:
-            reasons.append("🚨 Hệ số thanh toán nhanh thấp (< 0.8), nguy cơ vỡ nợ ngắn hạn cao.")
+            reasons.append("🚨 Báo động: Hệ số thanh toán nhanh thấp (< 0.8), áp lực nợ ngắn hạn cao.")
             status = "RED"
-            status_text = "🔴 BÁO ĐỘNG ĐỎ - RỦI RO THANH KHOẢN TRẦM TRỌNG"
+            status_text = "🔴 [NGUY HIỂM] - RỦI RO VỠ NỢ NGẮN HẠN TRẦM TRỌNG"
 
         return {"status": status, "status_text": status_text, "reasons": reasons}
 
     def forecast_cashflow(self):
         ocfs = [self.metrics[p]["OCF Value"] for p in self.periods]
         if len(ocfs) < 2:
-            return {"possible": False, "msg": "Không đủ kỳ dữ liệu để dự báo."}
+            return {"possible": False, "msg": "Dữ liệu không đủ để AI dự báo."}
         
         x = np.arange(len(ocfs))
         y = np.array(ocfs)
         slope, intercept = np.polyfit(x, y, 1)
         next_val = slope * len(ocfs) + intercept
-        trend = "TĂNG TRƯỞNG" if slope > 0 else "GIẢM"
-        return {"possible": True, "forecast_value": round(next_val, 2), "trend": trend, "slope": round(slope, 2)}
+        trend = "TĂNG TRƯỞNG" / 1 if slope > 0 else "SUY GIẢM"
+        return {"possible": True, "forecast_value": round(next_val, 2), "trend": "TĂNG TRƯỞNG" if slope > 0 else "SUY GIẢM", "slope": round(slope, 2)}
 
-uploaded_file = st.file_uploader("📥 Tải lên Báo cáo Tài chính (.xlsx)", type=["xlsx"])
+# Khung tải file đầu vào
+st.markdown("### 📥 MODULE KẾT NỐI DỮ LIỆU TÀI CHÍNH")
+uploaded_file = st.file_uploader("Tải lên tệp báo cáo tài chính (.xlsx)", type=["xlsx"])
 
 if uploaded_file is not None:
     try:
@@ -86,48 +141,53 @@ if uploaded_file is not None:
         risk = analyzer.evaluate_risk_level()
         forecast = analyzer.forecast_cashflow()
 
-        st.success("✅ Xử lý dữ liệu thành công!")
+        st.success("⚡ [AI CORE]: Đã quét và phân tích dữ liệu thành công!")
 
         col1, col2 = st.columns([1, 2])
 
         with col1:
-            st.markdown("### 📌 Cảnh báo Rủi ro")
-            status_color = "#D32F2F" if risk["status"] == "RED" else ("#FBC02D" if risk["status"] == "YELLOW" else "#388E3C")
+            st.markdown("### 🛡️ TRẠM KIỂM SOÁT RỦI RO")
+            status_color = "#ff3366" if risk["status"] == "RED" else ("#ffcc00" if risk["status"] == "YELLOW" else "#00ffcc")
             st.markdown(f"""
-            <div style="background-color: {status_color}; color: white; padding: 12px; border-radius: 8px; font-weight: bold; text-align: center;">
+            <div style="background-color: #131c31; border: 2px solid {status_color}; color: {status_color}; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; box-shadow: 0 0 10px {status_color};">
                 {risk['status_text']}
             </div>
             """, unsafe_allow_html=True)
             
             if risk['reasons']:
-                st.markdown("**Chi tiết nguy cơ:**")
+                st.markdown("<br>**Chi tiết phân tích lỗi:**", unsafe_allow_html=True)
                 for r in risk['reasons']:
                     st.write(r)
             else:
-                st.write("Không phát hiện dấu hiệu rủi ro nghiêm trọng.")
+                st.write("Không phát hiện bất thường trong hệ thống tài chính.")
 
         with col2:
-            st.markdown("### 📈 Dự báo Dòng tiền kỳ tiếp theo")
+            st.markdown("### 📈 MÔ HÌNH AI DỰ BÁO DÒNG TIỀN")
             if forecast["possible"]:
-                st.metric(label="Dòng tiền OCF Dự báo (Triệu VNĐ)", value=f"{forecast['forecast_value']:,}", delta=forecast['trend'])
+                st.metric(label="Dự báo OCF kỳ tiếp theo (Triệu VNĐ)", value=f"{forecast['forecast_value']:,}", delta=forecast['trend'])
             else:
                 st.info(forecast["msg"])
 
         st.markdown("---")
-        st.markdown("### 📊 Trực quan hóa Xu hướng Dòng tiền & Thanh khoản")
+        st.markdown("### 📊 GIAO DIỆN TRỰC QUAN HÓA DÒNG TIỀN OCF")
         periods = analyzer.periods
         ocfs = [ratios[p]["OCF Value"] for p in periods]
 
         fig = go.Figure()
-        fig.add_trace(go.Bar(x=periods, y=ocfs, name="Dòng tiền OCF (Triệu VNĐ)", marker_color='#1E88E5'))
-        fig.update_layout(title="Xu hướng Dòng tiền OCF qua các kỳ", template="plotly_white")
+        fig.add_trace(go.Bar(x=periods, y=ocfs, name="Dòng tiền OCF (Triệu VNĐ)", marker_color='#00f2fe'))
+        fig.update_layout(
+            title="Biểu đồ dao động Dòng tiền thuần từ HĐKD", 
+            template="plotly_dark",
+            paper_bgcolor="#131c31",
+            plot_bgcolor="#131c31"
+        )
         st.plotly_chart(fig, use_container_width=True)
 
-        st.markdown("### 📋 Bảng Chi tiết các Chỉ số Tài chính")
+        st.markdown("### 📋 BẢNG THÔNG SỐ CHỈ SỐ TÀI CHÍNH CHI TIẾT")
         df_res = pd.DataFrame(ratios)
         st.dataframe(df_res, use_container_width=True)
 
     except Exception as e:
-        st.error(f"❌ Lỗi đọc file: {str(e)}")
+        st.error(f"❌ [LỖI HỆ THỐNG]: {str(e)}")
 else:
-    st.info("👈 Vui lòng tải lên tệp Excel báo cáo tài chính mẫu (`bao_cao_tai_chinh_mau_multi.xlsx`) để bắt đầu phân tích.")
+    st.info("👈 Vui lòng tải lên tệp Excel báo cáo tài chính mẫu để khởi động hệ thống AI phân tích.")
