@@ -6,25 +6,20 @@ import plotly.graph_objects as go
 # Cấu hình trang rộng
 st.set_page_config(page_title="Hệ thống trợ lý ảo AI phân tích tài chính cảnh báo dòng tiền", layout="wide")
 
-# --- GIAO DIỆN CSS: HÌNH NỀN ROBOT KHÔNG GIAN XANH NEON & HIỆU ỨNG TRONG SUỐT ---
+# --- GIAO DIỆN CSS: KHÔNG GIAN AI & ROBOT CÔNG NGHỆ ---
 st.markdown("""
     <style>
-    /* Nhúng hình nền trực tiếp phong cách Robot AI không gian xanh */
     .stApp {
-        background-image: linear-gradient(rgba(5, 11, 26, 0.7), rgba(5, 11, 26, 0.85)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
+        background-color: #050b1a;
+        background-image: radial-gradient(circle at 50% 20%, #102650 0%, #050b1a 80%);
         color: #ffffff !important;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    /* Ép tất cả văn bản luôn sáng rõ nét */
     p, span, label, div, .streamlit-expanderHeader, .stMarkdown {
         color: #e0f2fe !important;
     }
     
-    /* Khung tiêu đề chính phong cách Hologram */
     .hero-container {
         background: rgba(13, 37, 78, 0.75);
         border: 2px solid #00f2fe;
@@ -54,18 +49,6 @@ st.markdown("""
         letter-spacing: 0.5px;
     }
 
-    /* Khung thẻ chức năng trong suốt */
-    .cyber-card {
-        background-color: rgba(16, 32, 64, 0.8);
-        border: 1px solid #3b82f6;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-        margin-bottom: 20px;
-        backdrop-filter: blur(8px);
-    }
-
-    /* Tùy chỉnh các nút bấm */
     .stButton>button {
         background: linear-gradient(45deg, #00f2fe, #3b82f6);
         color: #050b1a !important;
@@ -73,11 +56,6 @@ st.markdown("""
         border: none;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
-        transition: all 0.3s ease;
-    }
-    .stButton>button:hover {
-        background: linear-gradient(45deg, #3b82f6, #00f2fe);
-        box-shadow: 0 0 20px rgba(0, 242, 254, 0.9);
     }
     </style>
 """, unsafe_allow_html=True)
@@ -150,41 +128,4 @@ class FinancialAnalyzerStreamlit:
         
         x = np.arange(len(ocfs))
         y = np.array(ocfs)
-        slope, intercept = np.polyfit(x, y, 1)
-        next_val = slope * len(ocfs) + intercept
-        return {"possible": True, "forecast_value": round(next_val, 2), "trend": "TĂNG TRƯỞNG" if slope > 0 else "SUY GIẢM"}
-
-st.markdown("### 📥 MODULE KẾT NỐI DỮ LIỆU TÀI CHÍNH")
-uploaded_file = st.file_uploader("Tải lên tệp báo cáo tài chính (.xlsx)", type=["xlsx"])
-
-if uploaded_file is not None:
-    try:
-        analyzer = FinancialAnalyzerStreamlit(uploaded_file)
-        ratios = analyzer.compute_financial_ratios()
-        risk = analyzer.evaluate_risk_level()
-        forecast = analyzer.forecast_cashflow()
-
-        st.success("⚡ [AI CORE]: Đã quét và phân tích dữ liệu thành công!")
-
-        col1, col2 = st.columns([1, 2])
-
-        with col1:
-            st.markdown("### 🛡️ TRẠM KIỂM SOÁT RỦI RO")
-            status_color = "#f43f5e" if risk["status"] == "RED" else ("#fbbf24" if risk["status"] == "YELLOW" else "#34d399")
-            st.markdown(f"""
-            <div style="background-color: rgba(19, 28, 49, 0.9); border: 2px solid {status_color}; color: {status_color}; padding: 15px; border-radius: 10px; font-weight: bold; text-align: center; box-shadow: 0 0 15px {status_color};">
-                {risk['status_text']}
-            </div>
-            """, unsafe_allow_html=True)
-            
-            if risk['reasons']:
-                st.markdown("<br><b>Chi tiết phân tích lỗi:</b>", unsafe_allow_html=True)
-                for r in risk['reasons']:
-                    st.write(r)
-            else:
-                st.write("Không phát hiện bất thường trong hệ thống tài chính.")
-
-        with col2:
-            st.markdown("### 📈 MÔ HÌNH AI DỰ BÁO DÒNG TIỀN")
-            if forecast["possible"]:
-                st.metric(label="Dự báo OCF kỳ tiếp theo (Tri
+        slope, intercept = np
