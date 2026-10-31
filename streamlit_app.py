@@ -60,7 +60,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Tiêu đề & Slogan với phong cách Robot AI sinh động
+# Tiêu đề & Slogan phong cách Robot AI
 st.markdown("""
     <div class="hero-container">
         <div class="hero-title">🤖 ⚡ [ROBO-CFO AI] HỆ THỐNG TRỢ LÝ ẢO AI PHÂN TÍCH TÀI CHÍNH & CẢNH BÁO DÒNG TIỀN 🚀</div>
@@ -155,4 +155,4 @@ if uploaded_file is not None:
             </div>
             """, unsafe_allow_html=True)
             
-            if risk
+            if
