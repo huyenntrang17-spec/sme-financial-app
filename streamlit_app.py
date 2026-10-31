@@ -4,7 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 
 # Cấu hình trang rộng
-st.set_page_config(page_title="Hệ thống trợ lý ảo AI phân tích tài chính", layout="wide")
+st.set_page_config(page_title="Hệ thống trợ lý ảo AI phân tích tài chính cảnh báo dòng tiền", layout="wide")
 
 # --- GIAO DIỆN CSS: KHÔNG GIAN AI NEON & HIỆU ỨNG ROBOT CÔNG NGHỆ ---
 st.markdown("""
@@ -60,7 +60,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Tiêu đề & Slogan với các icon Robot AI sinh động
+# Tiêu đề & Slogan với phong cách Robot AI sinh động
 st.markdown("""
     <div class="hero-container">
         <div class="hero-title">🤖 ⚡ [ROBO-CFO AI] HỆ THỐNG TRỢ LÝ ẢO AI PHÂN TÍCH TÀI CHÍNH & CẢNH BÁO DÒNG TIỀN 🚀</div>
@@ -96,4 +96,63 @@ class FinancialAnalyzerStreamlit:
             ocf_margin = (ocf / revenue) * 100 if revenue > 0 else 0
 
             ratios[p] = {
-                "Quick Ratio": round
+                "Quick Ratio": round(quick_ratio, 2),
+                "OCF Margin (%)": round(ocf_margin, 2),
+                "OCF Value": ocf
+            }
+        return ratios
+
+    def evaluate_risk_level(self):
+        latest_p = self.periods[-1]
+        r = self.metrics[latest_p]
+        reasons = []
+        status = "GREEN"
+        status_text = "🟢 [AN TOÀN] - HỆ THỐNG DÒNG TIỀN ỔN ĐỊNH"
+
+        if r["OCF Margin (%)"] < 5:
+            reasons.append("⚠️ Cảnh báo: Biên dòng tiền hoạt động kinh doanh mỏng (< 5%).")
+            status = "YELLOW"
+            status_text = "🟡 [CẢNH BÁO] - NGUY CƠ NGHẼN MẠCH THANH KHOẢN"
+
+        if r["Quick Ratio"] < 0.8:
+            reasons.append("🚨 Báo động: Hệ số thanh toán nhanh thấp (< 0.8), áp lực nợ ngắn hạn cao.")
+            status = "RED"
+            status_text = "🔴 [NGUY HIỂM] - RỦI RO VỠ NỢ NGẮN HẠN TRẦM TRỌNG"
+
+        return {"status": status, "status_text": status_text, "reasons": reasons}
+
+    def forecast_cashflow(self):
+        ocfs = [self.metrics[p]["OCF Value"] for p in self.periods]
+        if len(ocfs) < 2:
+            return {"possible": False, "msg": "Dữ liệu không đủ để AI dự báo."}
+        
+        x = np.arange(len(ocfs))
+        y = np.array(ocfs)
+        slope, intercept = np.polyfit(x, y, 1)
+        next_val = slope * len(ocfs) + intercept
+        return {"possible": True, "forecast_value": round(next_val, 2), "trend": "TĂNG TRƯỞNG" if slope > 0 else "SUY GIẢM"}
+
+st.markdown("### 🤖 📥 MODULE KẾT NỐI DỮ LIỆU TÀI CHÍNH")
+uploaded_file = st.file_uploader("Tải lên tệp báo cáo tài chính (.xlsx)", type=["xlsx"])
+
+if uploaded_file is not None:
+    try:
+        analyzer = FinancialAnalyzerStreamlit(uploaded_file)
+        ratios = analyzer.compute_financial_ratios()
+        risk = analyzer.evaluate_risk_level()
+        forecast = analyzer.forecast_cashflow()
+
+        st.success("⚡ [ROBO-CFO CORE]: Đã quét và phân tích dữ liệu tài chính thành công!")
+
+        col1, col2 = st.columns([1, 2])
+
+        with col1:
+            st.markdown("### 🛡️ TRẠM KIỂM SOÁT RỦI RO")
+            status_color = "#f43f5e" if risk["status"] == "RED" else ("#fbbf24" if risk["status"] == "YELLOW" else "#34d399")
+            st.markdown(f"""
+            <div style="background-color: rgba(19, 28, 49, 0.9); border: 2px solid {status_color}; color: {status_color}; padding: 15px; border-radius: 10px; font-weight: bold; text-align: center; box-shadow: 0 0 15px {status_color};">
+                {risk['status_text']}
+            </div>
+            """, unsafe_allow_html=True)
+            
+            if risk
