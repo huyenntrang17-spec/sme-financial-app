@@ -3,45 +3,66 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
+# Cấu hình trang rộng
 st.set_page_config(page_title="Hệ thống trợ lý ảo AI phân tích tài chính cảnh báo dòng tiền", layout="wide")
 
+# --- GIAO DIỆN CSS: HIỆU ỨNG KHÔNG GIAN AI & ROBOT CÔNG NGHỆ ---
 st.markdown("""
     <style>
+    /* Tổng thể nền tối không gian xanh dương đậm chất AI */
     .stApp {
         background-color: #050b1a;
-        background-image: radial-gradient(circle at 50% 20%, #0f2b5c 0%, #050b1a 80%);
+        background-image: radial-gradient(circle at 50% 20%, #102650 0%, #050b1a 80%);
         color: #ffffff !important;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+    
+    /* Ép văn bản luôn sáng rõ */
     p, span, label, div, .streamlit-expanderHeader, .stMarkdown {
         color: #e0f2fe !important;
     }
+    
+    /* Khung tiêu đề chính phong cách Hologram không gian */
     .hero-container {
-        background: rgba(13, 37, 78, 0.85);
+        background: rgba(13, 37, 78, 0.7);
         border: 2px solid #00f2fe;
         border-radius: 15px;
         padding: 25px;
         text-align: center;
-        box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+        box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
         margin-bottom: 25px;
         backdrop-filter: blur(10px);
     }
+
     .hero-title {
         background: linear-gradient(90deg, #00f2fe 0%, #70e1f5 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 900;
-        font-size: 24px;
+        font-size: 26px;
         text-transform: uppercase;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
     }
+
     .hero-subtitle {
         color: #93c5fd !important;
         font-size: 15px;
         font-weight: 600;
         letter-spacing: 0.5px;
     }
+
+    /* Khung thẻ chức năng */
+    .cyber-card {
+        background-color: rgba(16, 32, 64, 0.8);
+        border: 1px solid #3b82f6;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        margin-bottom: 20px;
+    }
+
+    /* Tùy chỉnh các nút bấm */
     .stButton>button {
         background: linear-gradient(45deg, #00f2fe, #3b82f6);
         color: #050b1a !important;
@@ -49,13 +70,19 @@ st.markdown("""
         border: none;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        transition: all 0.3s ease;
+    }
+    .stButton>button:hover {
+        background: linear-gradient(45deg, #3b82f6, #00f2fe);
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.9);
     }
     </style>
 """, unsafe_allow_html=True)
 
+# Tiêu đề & Slogan chuẩn theo yêu cầu
 st.markdown("""
     <div class="hero-container">
-        <div class="hero-title">🤖 ⚡ HỆ THỐNG TRỢ LÝ ẢO AI PHÂN TÍCH TÀI CHÍNH & CẢNH BÁO DÒNG TIỀN 🚀</div>
+        <div class="hero-title">🤖 HỆ THỐNG TRỢ LÝ ẢO AI PHÂN TÍCH TÀI CHÍNH & CẢNH BÁO DÒNG TIỀN</div>
         <div class="hero-subtitle">Giải pháp hỗ trợ quản lý tài chính tinh gọn cho doanh nghiệp nhỏ</div>
     </div>
 """, unsafe_allow_html=True)
@@ -124,7 +151,7 @@ class FinancialAnalyzerStreamlit:
         next_val = slope * len(ocfs) + intercept
         return {"possible": True, "forecast_value": round(next_val, 2), "trend": "TĂNG TRƯỞNG" if slope > 0 else "SUY GIẢM"}
 
-st.markdown("### 🤖 📥 MODULE KẾT NỐI DỮ LIỆU TÀI CHÍNH")
+st.markdown("### 📥 MODULE KẾT NỐI DỮ LIỆU TÀI CHÍNH")
 uploaded_file = st.file_uploader("Tải lên tệp báo cáo tài chính (.xlsx)", type=["xlsx"])
 
 if uploaded_file is not None:
@@ -134,7 +161,7 @@ if uploaded_file is not None:
         risk = analyzer.evaluate_risk_level()
         forecast = analyzer.forecast_cashflow()
 
-        st.success("⚡ [ROBO-CFO CORE]: Đã quét và phân tích dữ liệu tài chính thành công!")
+        st.success("⚡ [AI CORE]: Đã quét và phân tích dữ liệu thành công!")
 
         col1, col2 = st.columns([1, 2])
 
@@ -183,4 +210,4 @@ if uploaded_file is not None:
     except Exception as e:
         st.error(f"❌ [LỖI HỆ THỐNG]: {str(e)}")
 else:
-    st.info("👈 Vui lòng tải lên tệp Excel báo cáo tài chính mẫu để khởi động hệ thống trợ lý ảo AI phân tích.")
+    st.info("👈 Vui lòng tải lên tệp Excel báo cáo tài chính mẫu để khởi động hệ thống AI phân tích.")
