@@ -3,67 +3,89 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
-# Cấu hình trang với giao diện rộng
-st.set_page_config(page_title="AI Cybernetic CFO - SME Financial", layout="wide")
+# Cấu hình trang rộng
+st.set_page_config(page_title="Hệ thống trợ lý ảo AI phân tích tài chính cảnh báo dòng tiền", layout="wide")
 
-# --- GIAO DIỆN CSS PHONG CÁCH ROBOT CÔNG NGHỆ (SCI-FI / CYBERPUNK) ---
+# --- GIAO DIỆN CSS: HIỆU ỨNG KHÔNG GIAN AI & ROBOT CÔNG NGHỆ ---
 st.markdown("""
     <style>
-    /* Màu nền tổng thể tối đậm chất công nghệ */
+    /* Tổng thể nền tối không gian xanh dương đậm chất AI */
     .stApp {
-        background-color: #0b0f19;
-        color: #00ffcc;
-        font-family: 'Courier New', Courier, monospace;
+        background-color: #050b1a;
+        background-image: radial-gradient(circle at 50% 20%, #102650 0%, #050b1a 80%);
+        color: #ffffff !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    /* Tiêu đề phong cách bảng mạch / Hologram */
-    .hero-title {
-        background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    /* Ép văn bản luôn sáng rõ */
+    p, span, label, div, .streamlit-expanderHeader, .stMarkdown {
+        color: #e0f2fe !important;
+    }
+    
+    /* Khung tiêu đề chính phong cách Hologram không gian */
+    .hero-container {
+        background: rgba(13, 37, 78, 0.7);
+        border: 2px solid #00f2fe;
+        border-radius: 15px;
+        padding: 25px;
         text-align: center;
-        font-weight: 900;
-        font-size: 28px;
-        text-shadow: 0px 0px 20px rgba(0, 242, 254, 0.5);
-        border-bottom: 2px solid #00f2fe;
-        padding-bottom: 15px;
+        box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
         margin-bottom: 25px;
+        backdrop-filter: blur(10px);
     }
 
-    /* Khung panel thông tin phong cách trạm AI */
+    .hero-title {
+        background: linear-gradient(90deg, #00f2fe 0%, #70e1f5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 900;
+        font-size: 26px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    .hero-subtitle {
+        color: #93c5fd !important;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* Khung thẻ chức năng */
     .cyber-card {
-        background-color: #131c31;
-        border: 1px solid #00f2fe;
-        border-radius: 10px;
+        background-color: rgba(16, 32, 64, 0.8);
+        border: 1px solid #3b82f6;
+        border-radius: 12px;
         padding: 20px;
-        box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
         margin-bottom: 20px;
     }
 
     /* Tùy chỉnh các nút bấm */
     .stButton>button {
-        background: linear-gradient(45deg, #00f2fe, #4facfe);
-        color: #0b0f19;
+        background: linear-gradient(45deg, #00f2fe, #3b82f6);
+        color: #050b1a !important;
         font-weight: bold;
         border: none;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        transition: all 0.3s ease;
     }
     .stButton>button:hover {
-        background: linear-gradient(45deg, #4facfe, #00f2fe);
-        color: #ffffff;
-        box-shadow: 0 0 20px rgba(0, 242, 254, 0.8);
-    }
-    
-    /* Chữ hiển thị nhãn */
-    label, .streamlit-expanderHeader {
-        color: #00f2fe !important;
+        background: linear-gradient(45deg, #3b82f6, #00f2fe);
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.9);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Tiêu đề ứng dụng
-st.markdown('<div class="hero-title">🤖 [SYSTEM AI] - TRỢ LÝ CFO & CẢNH BÁO RỦI RO DÒNG TIỀN (SME)</div>', unsafe_allow_html=True)
+# Tiêu đề & Slogan chuẩn theo yêu cầu
+st.markdown("""
+    <div class="hero-container">
+        <div class="hero-title">🤖 HỆ THỐNG TRỢ LÝ ẢO AI PHÂN TÍCH TÀI CHÍNH & CẢNH BÁO DÒNG TIỀN</div>
+        <div class="hero-subtitle">Giải pháp hỗ trợ quản lý tài chính tinh gọn cho doanh nghiệp nhỏ</div>
+    </div>
+""", unsafe_allow_html=True)
 
 class FinancialAnalyzerStreamlit:
     def __init__(self, file_path):
@@ -127,10 +149,8 @@ class FinancialAnalyzerStreamlit:
         y = np.array(ocfs)
         slope, intercept = np.polyfit(x, y, 1)
         next_val = slope * len(ocfs) + intercept
-        trend = "TĂNG TRƯỞNG" / 1 if slope > 0 else "SUY GIẢM"
-        return {"possible": True, "forecast_value": round(next_val, 2), "trend": "TĂNG TRƯỞNG" if slope > 0 else "SUY GIẢM", "slope": round(slope, 2)}
+        return {"possible": True, "forecast_value": round(next_val, 2), "trend": "TĂNG TRƯỞNG" if slope > 0 else "SUY GIẢM"}
 
-# Khung tải file đầu vào
 st.markdown("### 📥 MODULE KẾT NỐI DỮ LIỆU TÀI CHÍNH")
 uploaded_file = st.file_uploader("Tải lên tệp báo cáo tài chính (.xlsx)", type=["xlsx"])
 
@@ -147,15 +167,15 @@ if uploaded_file is not None:
 
         with col1:
             st.markdown("### 🛡️ TRẠM KIỂM SOÁT RỦI RO")
-            status_color = "#ff3366" if risk["status"] == "RED" else ("#ffcc00" if risk["status"] == "YELLOW" else "#00ffcc")
+            status_color = "#f43f5e" if risk["status"] == "RED" else ("#fbbf24" if risk["status"] == "YELLOW" else "#34d399")
             st.markdown(f"""
-            <div style="background-color: #131c31; border: 2px solid {status_color}; color: {status_color}; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; box-shadow: 0 0 10px {status_color};">
+            <div style="background-color: rgba(19, 28, 49, 0.9); border: 2px solid {status_color}; color: {status_color}; padding: 15px; border-radius: 10px; font-weight: bold; text-align: center; box-shadow: 0 0 15px {status_color};">
                 {risk['status_text']}
             </div>
             """, unsafe_allow_html=True)
             
             if risk['reasons']:
-                st.markdown("<br>**Chi tiết phân tích lỗi:**", unsafe_allow_html=True)
+                st.markdown("<br><b>Chi tiết phân tích lỗi:</b>", unsafe_allow_html=True)
                 for r in risk['reasons']:
                     st.write(r)
             else:
@@ -178,8 +198,8 @@ if uploaded_file is not None:
         fig.update_layout(
             title="Biểu đồ dao động Dòng tiền thuần từ HĐKD", 
             template="plotly_dark",
-            paper_bgcolor="#131c31",
-            plot_bgcolor="#131c31"
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)"
         )
         st.plotly_chart(fig, use_container_width=True)
 
