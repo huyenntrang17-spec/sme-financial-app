@@ -6,30 +6,32 @@ import plotly.graph_objects as go
 # Cấu hình trang rộng
 st.set_page_config(page_title="Hệ thống trợ lý ảo AI phân tích tài chính cảnh báo dòng tiền", layout="wide")
 
-# --- GIAO DIỆN CSS: HIỆU ỨNG KHÔNG GIAN AI & ROBOT CÔNG NGHỆ ---
+# --- GIAO DIỆN CSS: HÌNH NỀN ROBOT KHÔNG GIAN XANH NEON & HIỆU ỨNG TRONG SUỐT ---
 st.markdown("""
     <style>
-    /* Tổng thể nền tối không gian xanh dương đậm chất AI */
+    /* Nhúng hình nền trực tiếp phong cách Robot AI không gian xanh */
     .stApp {
-        background-color: #050b1a;
-        background-image: radial-gradient(circle at 50% 20%, #102650 0%, #050b1a 80%);
+        background-image: linear-gradient(rgba(5, 11, 26, 0.7), rgba(5, 11, 26, 0.85)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
         color: #ffffff !important;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    /* Ép văn bản luôn sáng rõ */
+    /* Ép tất cả văn bản luôn sáng rõ nét */
     p, span, label, div, .streamlit-expanderHeader, .stMarkdown {
         color: #e0f2fe !important;
     }
     
-    /* Khung tiêu đề chính phong cách Hologram không gian */
+    /* Khung tiêu đề chính phong cách Hologram */
     .hero-container {
-        background: rgba(13, 37, 78, 0.7);
+        background: rgba(13, 37, 78, 0.75);
         border: 2px solid #00f2fe;
         border-radius: 15px;
         padding: 25px;
         text-align: center;
-        box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
+        box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
         margin-bottom: 25px;
         backdrop-filter: blur(10px);
     }
@@ -39,20 +41,20 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 900;
-        font-size: 26px;
+        font-size: 24px;
         text-transform: uppercase;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
     }
 
     .hero-subtitle {
         color: #93c5fd !important;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: 600;
         letter-spacing: 0.5px;
     }
 
-    /* Khung thẻ chức năng */
+    /* Khung thẻ chức năng trong suốt */
     .cyber-card {
         background-color: rgba(16, 32, 64, 0.8);
         border: 1px solid #3b82f6;
@@ -60,6 +62,7 @@ st.markdown("""
         padding: 20px;
         box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
         margin-bottom: 20px;
+        backdrop-filter: blur(8px);
     }
 
     /* Tùy chỉnh các nút bấm */
@@ -184,30 +187,4 @@ if uploaded_file is not None:
         with col2:
             st.markdown("### 📈 MÔ HÌNH AI DỰ BÁO DÒNG TIỀN")
             if forecast["possible"]:
-                st.metric(label="Dự báo OCF kỳ tiếp theo (Triệu VNĐ)", value=f"{forecast['forecast_value']:,}", delta=forecast['trend'])
-            else:
-                st.info(forecast["msg"])
-
-        st.markdown("---")
-        st.markdown("### 📊 GIAO DIỆN TRỰC QUAN HÓA DÒNG TIỀN OCF")
-        periods = analyzer.periods
-        ocfs = [ratios[p]["OCF Value"] for p in periods]
-
-        fig = go.Figure()
-        fig.add_trace(go.Bar(x=periods, y=ocfs, name="Dòng tiền OCF (Triệu VNĐ)", marker_color='#00f2fe'))
-        fig.update_layout(
-            title="Biểu đồ dao động Dòng tiền thuần từ HĐKD", 
-            template="plotly_dark",
-            paper_bgcolor="rgba(0,0,0,0)",
-            plot_bgcolor="rgba(0,0,0,0)"
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-        st.markdown("### 📋 BẢNG THÔNG SỐ CHỈ SỐ TÀI CHÍNH CHI TIẾT")
-        df_res = pd.DataFrame(ratios)
-        st.dataframe(df_res, use_container_width=True)
-
-    except Exception as e:
-        st.error(f"❌ [LỖI HỆ THỐNG]: {str(e)}")
-else:
-    st.info("👈 Vui lòng tải lên tệp Excel báo cáo tài chính mẫu để khởi động hệ thống AI phân tích.")
+                st.metric(label="Dự báo OCF kỳ tiếp theo (Tri
